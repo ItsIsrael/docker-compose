@@ -9,7 +9,7 @@ services:
       - PUID=1000 #optional
       - PGID=1000 #optional
       - TZ=Europe/Madrid
-      - SUBDOMAINS=israelq,
+      - SUBDOMAINS=israelq, copaona,
       - TOKEN=6e57d7ab-c2e5-4181-989f-b7331f7d837b
       - LOG_FILE=false #optional
     volumes:
@@ -125,7 +125,7 @@ services:
       - TZ=Europe/Madrid
       - SERVERURL=israelq.duckdns.org
       - SERVERPORT=51820 #optional
-      - PEERS=2 #optional
+      - PEERS=3 #optional
       - PEERDNS=auto
       - INTERNAL_SUBNET=10.13.13.0 #optional
     volumes:
@@ -147,8 +147,7 @@ services:
       - VERSION=docker
       - PLEX_CLAIM= #optional
     volumes:
-      - /home/israel/compose/plex/config:/config
-      - /home/israel/series:/series
+      - /home/israel/compose/data/plex/config:/config
     restart: unless-stopped
 
 # ______________________ PHP MY ADMIN________________________________
@@ -168,7 +167,6 @@ services:
 
 # _________________________ PORTAINER _______________________________
 
-services:
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainerWEB
@@ -181,3 +179,15 @@ services:
       - ./portainer-data:/data
     ports:
       - 9000:9000
+#______________________________ OPENVPN _______________________________
+
+  openvpn:
+    cap_add:
+     - NET_ADMIN
+    image: kylemanna/openvpn
+    container_name: openvpn
+    ports:
+     - "1194:1194/udp"
+    restart: always
+    volumes:
+     - ./data/openvpn/conf:/etc/openvpn
